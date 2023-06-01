@@ -1,4 +1,4 @@
-#include "sever.h"
+#include "server.h"
 
 Server::Server()
 {
@@ -20,9 +20,9 @@ Server::~Server()
 
 void Server::getStandard()
 {
-    cout << "ÊäÈë¶Ë¿ÚºÅ£º";
+    cout << "è¾“å…¥ç«¯å£å·ï¼š";
     cin >> port;
-    cout << "ÊäÈë´òÓ¡¼ä¸ôÊ±¼ä£¨·Ö£©£º";
+    cout << "è¾“å…¥æ‰“å°é—´éš”æ—¶é—´ï¼ˆåˆ†ï¼‰ï¼š";
     cin >> peroidic_printTime;
 }
 
@@ -33,32 +33,32 @@ int Server::processData(const char* data)
 
 int Server::work()
 {
-    //¿ªÊ¼¼àÌı
+    //å¼€å§‹ç›‘å¬
     if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR)
         cerr << "listen error with code " << WSAGetLastError() << " !" << endl;
-    //ÕıÔÚ¼à²âµÄÎÄ¼şÃèÊö·û¼¯ºÏ
+    //æ­£åœ¨ç›‘æµ‹çš„æ–‡ä»¶æè¿°ç¬¦é›†åˆ
     fd_set clientSet;
     FD_ZERO(&clientSet);
     FD_SET(serverSocket, &clientSet);
-    //select³¬Ê±Ê±¼ä
+    //selectè¶…æ—¶æ—¶é—´
     timeval timeout;
     timeout.tv_sec = 1;
     timeout.tv_usec = 0;
-    //Ñ­»·Êä³öÔÚÏßÈËÊı
+    //å¾ªç¯è¾“å‡ºåœ¨çº¿äººæ•°
     int t = 0;
     thread([&]() {
         while (true)
         {
             if (t == 0) {
                 printCurrentTime();
-                cout << "µ±Ç°ÔÚÏßÈËÊı£º" << clientSet.fd_count - 1 << endl;
+                cout << "å½“å‰åœ¨çº¿äººæ•°ï¼š" << clientSet.fd_count - 1 << endl;
             }
             t++;
             t = t % int(60 * peroidic_printTime);
             Sleep(1000);
         }
         }).detach();
-    //¼ì²âÍË³ö
+    //æ£€æµ‹é€€å‡º
     bool flag = 1;
     thread([&]()
         {
@@ -72,7 +72,7 @@ int Server::work()
                 Sleep(50);
             }
         }).detach();
-    //Ñ­»·Ê¹ÓÃselectº¯ÊıÅĞ¶ÏÌ×½Ó×Ö×´Ì¬£¬¶ÔÓ¦½øĞĞÏàÓ¦´¦Àí
+    //å¾ªç¯ä½¿ç”¨selectå‡½æ•°åˆ¤æ–­å¥—æ¥å­—çŠ¶æ€ï¼Œå¯¹åº”è¿›è¡Œç›¸åº”å¤„ç†
     while (flag)
     {
         fd_set copySet1 = clientSet;
